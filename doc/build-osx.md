@@ -146,7 +146,11 @@ directory. We have to first create the RPC configuration file, though.
 Run `./globalboostd` to get the filename where it should be put, or just try these
 commands:
 
+<<<<<<< HEAD
     echo -e "rpcuser=globalboostrpc\nrpcpassword=$(xxd -l 16 -p /dev/urandom)" > "/Users/${USER}/Library/Application Support/GlobalBoost/globalboost.conf"
+=======
+    echo -e "rpcuser=globalboostrpc\nrpcpassword=$(xxd -l 16 -p /dev/urandom)" > "/Users/${USER}/Library/Application Support/GlobalBoost/bitcoin.conf"
+>>>>>>> origin/master
     chmod 600 "/Users/${USER}/Library/Application Support/GlobalBoost/globalboost.conf"
 
 When next you run it, it will start downloading the blockchain, but it won't
