@@ -1302,7 +1302,8 @@ unsigned int DarkGravityWave(const CBlockIndex* pindexLast, const CBlockHeader *
     CBigNum PastDifficultyAveragePrev;
 
     if (BlockLastSolved == NULL || BlockLastSolved->nHeight == 0 || BlockLastSolved->nHeight < PastBlocksMin) { 
-        return bnProofOfWorkLimit.GetCompact(); 
+        //return bnProofOfWorkLimit.GetCompact(); 
+		return Params().ProofOfWorkLimit().GetCompact();
     }
         
     for (unsigned int i = 1; BlockReading && BlockReading->nHeight > 0; i++) {
@@ -1316,7 +1317,7 @@ unsigned int DarkGravityWave(const CBlockIndex* pindexLast, const CBlockHeader *
         }
 
         if(LastBlockTime > 0){
-            int64 Diff = (LastBlockTime - BlockReading->GetBlockTime());
+            int64_t Diff = (LastBlockTime - BlockReading->GetBlockTime());
             nActualTimespan += Diff;
         }
         LastBlockTime = BlockReading->GetBlockTime();      
@@ -1327,7 +1328,7 @@ unsigned int DarkGravityWave(const CBlockIndex* pindexLast, const CBlockHeader *
     
     CBigNum bnNew(PastDifficultyAverage);
 
-    int64 nTargetTimespan = CountBlocks*nTargetSpacing;
+    int64_t nTargetTimespan = CountBlocks*nTargetSpacing;
 
     if (nActualTimespan < nTargetTimespan/3)
         nActualTimespan = nTargetTimespan/3;

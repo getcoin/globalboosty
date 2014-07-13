@@ -2679,18 +2679,18 @@ Più URL vengono separati da una barra verticale |.</translation>
         <source>%s, you must set a rpcpassword in the configuration file:
 %s
 It is recommended you use the following random password:
-rpcuser=bitcoinrpc
+rpcuser=globalboostrpc
 rpcpassword=%s
 (you do not need to remember this password)
 The username and password MUST NOT be the same.
 If the file does not exist, create it with owner-readable-only file permissions.
 It is also recommended to set alertnotify so you are notified of problems;
-for example: alertnotify=echo %%s | mail -s &quot;Bitcoin Alert&quot; admin@foo.com
+for example: alertnotify=echo %%s | mail -s &quot;GlobalBoost Alert&quot; admin@foo.com
 </source>
         <translation>%s, devi impostare una rpcpassword nel file di configurazione:
 %s
 Si raccomanda l&apos;uso della seguente password generata casualmente:
-rpcuser=bitcoinrpc
+rpcuser=globalboostrpc
 rpcpassword=%s
 (non serve ricordare questa password)
 Il nome utente e la password NON DEVONO essere uguali.
