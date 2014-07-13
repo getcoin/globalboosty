@@ -2609,8 +2609,8 @@ Endereço: %4</translation>
         <translation>Opções:</translation>
     </message>
     <message>
-        <source>Specify configuration file (default: bitcoin.conf)</source>
-        <translation>Especificar ficheiro de configuração (por defeito: bitcoin.conf)</translation>
+        <source>Specify configuration file (default: globalboost.conf)</source>
+        <translation>Especificar ficheiro de configuração (por defeito: globalboost.conf)</translation>
     </message>
     <message>
         <source>Specify pid file (default: globalboostd.pid)</source>
@@ -2676,18 +2676,18 @@ Endereço: %4</translation>
         <source>%s, you must set a rpcpassword in the configuration file:
 %s
 It is recommended you use the following random password:
-rpcuser=bitcoinrpc
+rpcuser=globalboostrpc
 rpcpassword=%s
 (you do not need to remember this password)
 The username and password MUST NOT be the same.
 If the file does not exist, create it with owner-readable-only file permissions.
 It is also recommended to set alertnotify so you are notified of problems;
-for example: alertnotify=echo %%s | mail -s &quot;Bitcoin Alert&quot; admin@foo.com
+for example: alertnotify=echo %%s | mail -s &quot;GlobalBoost Alert&quot; admin@foo.com
 </source>
         <translation>%s, deverá definir uma rpcpassword no ficheiro de configuração:
 %s
 É recomendado que use a seguinte palavra-passe aleatória:
-rpcuser=bitcoinrpc
+rpcuser=globalboostrpc
 rpcpassword=%s
 (não é necessário lembrar esta palavra-passe)
 O nome de utilizador e palavra-passe NÃO PODEM ser iguais.

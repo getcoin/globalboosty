@@ -63,7 +63,7 @@ public:
 };
 
 /**
- * Bitcoin RPC command dispatcher.
+ * GlobalBoost RPC command dispatcher.
  */
 class CRPCTable
 {

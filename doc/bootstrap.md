@@ -1,6 +1,6 @@
 ### Bootstrap the Blockchain Synchronization
 
-Normally the Bitcoin client will download the transaction and network information, called the blockchain, from the network by syncing with the other clients. This can be a process that can take multiple days as the [Bitcoin block chain](https://blockchain.info/charts/blocks-size) has grown to more than 15 gigabytes, and is growing almost a gigabyte every month. Luckily there is a safe and fast way to speed up this process. We’ll show you how to bootstrap your blockchain to bring your client up to speed in just a few simple steps.
+Normally the GlobalBoost client will download the transaction and network information, called the blockchain, from the network by syncing with the other clients. This can be a process that can take multiple days as the [Bitcoin block chain](https://blockchain.info/charts/blocks-size) has grown to more than 15 gigabytes, and is growing almost a gigabyte every month. Luckily there is a safe and fast way to speed up this process. We’ll show you how to bootstrap your blockchain to bring your client up to speed in just a few simple steps.
 
 ### Requirements
 

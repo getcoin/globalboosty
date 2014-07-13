@@ -190,7 +190,7 @@ void Intro::pickDataDirectory()
         settings.setValue("strDataDir", dataDir);
     }
     /* Only override -datadir if different from the default, to make it possible to
-     * override -datadir in the bitcoin.conf file in the default data directory
+     * override -datadir in the globalboost.conf file in the default data directory
      * (to be consistent with globalboostd behavior)
      */
     if(dataDir != getDefaultDataDirectory())
