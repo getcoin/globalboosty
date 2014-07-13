@@ -94,8 +94,8 @@ PATH.
 
 1. Clone the github tree to get the source code and go into the directory.
 
-        git clone https://github.com/bitcoin/bitcoin.git
-        cd bitcoin
+        git clone https://github.com/GlobalBoost/GlobalBoost.git
+        cd GlobalBoost
 
 2.  Build globalboostd:
 
@@ -149,7 +149,7 @@ commands:
 <<<<<<< HEAD
     echo -e "rpcuser=globalboostrpc\nrpcpassword=$(xxd -l 16 -p /dev/urandom)" > "/Users/${USER}/Library/Application Support/GlobalBoost/globalboost.conf"
 =======
-    echo -e "rpcuser=globalboostrpc\nrpcpassword=$(xxd -l 16 -p /dev/urandom)" > "/Users/${USER}/Library/Application Support/GlobalBoost/bitcoin.conf"
+    echo -e "rpcuser=globalboostrpc\nrpcpassword=$(xxd -l 16 -p /dev/urandom)" > "/Users/${USER}/Library/Application Support/GlobalBoost/globalboost.conf"
 >>>>>>> origin/master
     chmod 600 "/Users/${USER}/Library/Application Support/GlobalBoost/globalboost.conf"
 
@@ -161,6 +161,6 @@ you can monitor its process by looking at the debug.log file, like this:
 
 Other commands:
 
-    ./globalboostd -daemon # to start the bitcoin daemon.
+    ./globalboostd -daemon # to start the globalboost daemon.
     ./globalboost-cli --help  # for a list of command-line options.
     ./globalboost-cli help    # When the daemon is running, to get a list of RPC commands
