@@ -11,6 +11,7 @@
 
 #include "addrman.h"
 #include "checkpoints.h"
+#include "checkpointsync.h"
 #include "main.h"
 #include "miner.h"
 #include "net.h"

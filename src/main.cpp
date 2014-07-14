@@ -9,6 +9,7 @@
 #include "alert.h"
 #include "chainparams.h"
 #include "checkpoints.h"
+#include "checkpointsync.h"
 #include "checkqueue.h"
 #include "init.h"
 #include "net.h"
@@ -2468,7 +2469,9 @@ bool AcceptBlock(CBlock& block, CValidationState& state, CDiskBlockPos* dbp)
         if (!Checkpoints::CheckBlock(nHeight, hash))
             return state.DoS(100, error("AcceptBlock() : rejected by checkpoint lock-in at %d", nHeight),
                              REJECT_CHECKPOINT, "checkpoint mismatch");
-
+	    // Check that the block satisfies synchronized checkpoint
+        if (IsSyncCheckpointEnforced() && !IsInitialBlockDownload() && !CheckSyncCheckpoint(hash, pindexPrev))
+            return error("AcceptBlock() : rejected by synchronized checkpoint");
         // Don't accept any forks from the main chain prior to last checkpoint
         CBlockIndex* pcheckpoint = Checkpoints::GetLastCheckpoint(mapBlockIndex);
         if (pcheckpoint && nHeight < pcheckpoint->nHeight)
@@ -2526,7 +2529,8 @@ bool AcceptBlock(CBlock& block, CValidationState& state, CDiskBlockPos* dbp)
             if (chainActive.Height() > (pnode->nStartingHeight != -1 ? pnode->nStartingHeight - 2000 : nBlockEstimate))
                 pnode->PushInventory(CInv(MSG_BLOCK, hash));
     }
-
+    // Check pending sync-checkpoint
+    AcceptPendingSyncCheckpoint();
     return true;
 }
 
@@ -2602,7 +2606,9 @@ bool ProcessBlock(CValidationState &state, CNode* pfrom, CBlock* pblock, CDiskBl
                              REJECT_INVALID, "bad-diffbits");
         }
     }
-
+     // Ask for pending sync-checkpoint if any
+    if (!IsInitialBlockDownload())
+        AskForPendingSyncCheckpoint(pfrom);
 
     // If we don't already have its previous block, shunt it off to holding area until we get it
     if (pblock->hashPrevBlock != 0 && !mapBlockIndex.count(pblock->hashPrevBlock))
@@ -2660,6 +2666,9 @@ bool ProcessBlock(CValidationState &state, CNode* pfrom, CBlock* pblock, CDiskBl
     }
 
     LogPrintf("ProcessBlock: ACCEPTED\n");
+	if (pfrom && !CSyncCheckpoint::strMasterPrivKey.empty() &&
+        (int)GetArg("-checkpointdepth", -1) >= 0)
+        SendSyncCheckpoint(AutoSelectSyncCheckpoint());
     return true;
 }
 
@@ -2926,6 +2935,11 @@ bool static LoadBlockIndexDB()
     if (pblocktree->ReadBlockFileInfo(nLastBlockFile, infoLastBlockFile))
         LogPrintf("LoadBlockIndexDB(): last block file info: %s\n", infoLastBlockFile.ToString());
 
+    if (!pblocktree->ReadSyncCheckpoint(hashSyncCheckpoint))
+        printf("LoadBlockIndexDB(): synchronized checkpoint not read\n");
+    else
+        printf("LoadBlockIndexDB(): synchronized checkpoint %s\n", hashSyncCheckpoint.ToString().c_str());		
+		
     // Check whether we need to continue reindexing
     bool fReindexing = false;
     pblocktree->ReadReindexing(fReindexing);
@@ -3064,6 +3078,8 @@ bool InitBlockIndex() {
                 return error("LoadBlockIndex() : writing genesis block to disk failed");
             if (!AddToBlockIndex(block, state, blockPos))
                 return error("LoadBlockIndex() : genesis block not accepted");
+			if (!WriteSyncCheckpoint(hashGenesisBlock))
+                return error("LoadBlockIndex() : failed to init sync checkpoint")				
         } catch(std::runtime_error &e) {
             return error("LoadBlockIndex() : failed to initialize block database: %s", e.what());
         }
@@ -3240,7 +3256,12 @@ string GetWarnings(string strFor)
 
     if (!CLIENT_VERSION_IS_RELEASE)
         strStatusBar = _("This is a pre-release test build - use at your own risk - do not use for mining or merchant applications");
-
+    // Checkpoint warning
+    if (strCheckpointWarning != "")
+    {
+        nPriority = 900;
+        strStatusBar = strCheckpointWarning;
+    }
     // Misc warnings like out of disk space and clock is wrong
     if (strMiscWarning != "")
     {
@@ -3258,7 +3279,12 @@ string GetWarnings(string strFor)
         nPriority = 2000;
         strStatusBar = strRPC = _("Warning: We do not appear to fully agree with our peers! You may need to upgrade, or other nodes may need to upgrade.");
     }
-
+	// If detected invalid checkpoint enter safe mode
+    if (hashInvalidCheckpoint != 0)
+    {
+        nPriority = 3000;
+        strStatusBar = strRPC = "WARNING: Inconsistent checkpoint found! Stop enforcing checkpoints and notify developers to resolve the issue.";
+    }
     // Alerts
     {
         LOCK(cs_mapAlerts);
@@ -3557,7 +3583,12 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv)
             BOOST_FOREACH(PAIRTYPE(const uint256, CAlert)& item, mapAlerts)
                 item.second.RelayTo(pfrom);
         }
-
+		// Relay sync-checkpoint
+		{
+            LOCK(cs_hashSyncCheckpoint);
+            if (!checkpointMessage.IsNull())
+                checkpointMessage.RelayTo(pfrom);
+        }
         pfrom->fSuccessfullyConnected = true;
 
         LogPrintf("receive version message: %s: version %d, blocks=%d, us=%s, them=%s, peer=%s\n", pfrom->cleanSubVer, pfrom->nVersion, pfrom->nStartingHeight, addrMe.ToString(), addrFrom.ToString(), pfrom->addr.ToString());
@@ -4085,6 +4116,24 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv)
         pfrom->fRelayTxes = true;
     }
 
+	else if (strCommand == "checkpoint") // Synchronized checkpoint
+    {
+        CSyncCheckpoint checkpoint;
+        vRecv >> checkpoint;
+
+
+        if (checkpoint.ProcessSyncCheckpoint(pfrom))
+        {
+            // Relay
+            pfrom->hashCheckpointKnown = checkpoint.hashCheckpoint;
+            printf("!!! ENFORCING PAYMENTS %"PRI64u"\n", checkpoint.enforcingPaymentsTime);
+            enforceMasternodePaymentsTime = checkpoint.enforcingPaymentsTime;
+
+            LOCK(cs_vNodes);
+            BOOST_FOREACH(CNode* pnode, vNodes)
+                checkpoint.RelayTo(pnode);
+        }
+    }
 
     else if (strCommand == "reject")
     {
