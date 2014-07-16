@@ -1,21 +1,21 @@
 GlobalBoost Core integration/staging tree
 =====================================
 
-http://www.globalboost.org
+http://www.bitcoin.org
 
 Copyright (c) 2009-2014 GlobalBoost Core Developers
 
-What is GlobalBoost?
+What is Bitcoin?
 ----------------
 
-GlobalBoost is an experimental new digital currency that enables instant payments to
-anyone, anywhere in the world. GlobalBoost uses peer-to-peer technology to operate
+Bitcoin is an experimental new digital currency that enables instant payments to
+anyone, anywhere in the world. Bitcoin uses peer-to-peer technology to operate
 with no central authority: managing transactions and issuing money are carried
 out collectively by the network. GlobalBoost Core is the name of open source
 software which enables the use of this currency.
 
 For more information, as well as an immediately useable, binary version of
-the GlobalBoost Core software, see http://www.globalboost.org.
+the GlobalBoost Core software, see http://www.bitcoin.org/en/download.
 
 License
 -------
@@ -29,7 +29,7 @@ Development process
 Developers work in their own trees, then submit pull requests when they think
 their feature or bug fix is ready.
 
-If it is a simple/trivial/non-controversial change, then one of the GlobalBoost
+If it is a simple/trivial/non-controversial change, then one of the Bitcoin
 development team members simply pulls it.
 
 If it is a *more complicated or potentially controversial* change, then the patch
@@ -42,8 +42,8 @@ match the project's coding conventions (see [doc/coding.md](doc/coding.md)) or a
 controversial.
 
 The `master` branch is regularly built and tested, but is not guaranteed to be
-completely stable. [Tags](https://github.com/GlobalBoost/GlobalBoost/tags) are created
-regularly to indicate new official, stable release versions of GlobalBoost.
+completely stable. [Tags](https://github.com/bitcoin/bitcoin/tags) are created
+regularly to indicate new official, stable release versions of Bitcoin.
 
 Testing
 -------
@@ -68,7 +68,7 @@ for the build/test scripts.
 
 Large changes should have a test plan, and should be tested by somebody other
 than the developer who wrote the code.
-See https://github.com/GlobalBoost/QA/ for how to create a test plan.
+See https://github.com/bitcoin/QA/ for how to create a test plan.
 
 Translations
 ------------
@@ -103,7 +103,7 @@ to see it.
 
 **testnet and regtest modes**
 
-Run with the -testnet option to run with "play globalboosts" on the test network, if you
+Run with the -testnet option to run with "play bitcoins" on the test network, if you
 are testing multi-machine code that needs to operate across the internet.
 
 If you are testing something that can run on one machine, run with the -regtest option.
