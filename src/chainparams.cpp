@@ -41,7 +41,7 @@ public:
         vAlertPubKey = ParseHex("04f7b028664bb03ce4a1bc4e0e97f8748c9fffc8058b3ff6b586722a52519e4990021467c4e187149f3b75c98696848052d7e4369bbcff9eb0ed198b5c4e666d06");
         nDefaultPort = 8224;
         nRPCPort = 8223;
-        bnProofOfWorkLimit = CBigNum(~uint256(0) >> 20);
+        bnProofOfWorkLimit = CBigNum(~uint256(0) >> 32);
         nSubsidyHalvingInterval = 770000;
 
         // Build the genesis block. Note that the output of the genesis coinbase cannot
